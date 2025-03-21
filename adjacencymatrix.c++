@@ -36,11 +36,6 @@ class MyGraphAM{
             return (M[GetIndex(u,v)] != 0);
         }
 
-        double GetEdgeWeight(int u, int v){
-            if(u < n){
-                
-            }
-        }
 
         int GetDegree(int u){
             int degree = 0;
@@ -145,7 +140,16 @@ class MyGraphAM{
 int main(){
 
     int n = 5;
-    MyGraphAM* G = new
+    MyGraphAM* G = new MyGraphAM(n);
+    G->SetUndirectedEdge(0, 1);
+    G->SetUndirectedEdge(1, 2);
+    G->SetUndirectedEdge(2, 3);
+    G->SetUndirectedEdge(3, 0);
+    G->SetUndirectedEdge(0, 4);
+    G->SetUndirectedEdge(1, 4);
+    G->Display();
+    delete G;
+
 
 
 }

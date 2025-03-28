@@ -1,4 +1,6 @@
 #include <iostream>
+#include <tuple>
+#include <climits>
 
 using namespace std;
 
@@ -176,6 +178,48 @@ TreeNode* DeleteNode(TreeNode *root, MyType data){
     return root;
 }
 
+int FindMinTree(TreeNode *root){
+    if(root == nullptr){
+        return INT_MAX; //or undefined
+    }
+    if(root->left != nullptr){
+        return FindMinTree(root->left);
+    }
+    return root->data;
+}
+
+int FindMaxTree(TreeNode *root){
+    if(root == nullptr){
+        return INT_MAX;
+    }
+    if(root->right != nullptr){
+        return FindMaxTree(root->right);
+    }
+    return root->data;
+}
+
+int FindPredecessor(TreeNode* root){
+    if(!root || !root->data){
+        return INT_MIN;
+    }
+    TreeNode* curr = root->left;
+    while(curr->right){
+        curr = curr->right;
+    }
+    return curr->data;
+}
+
+int FindSuccessor(TreeNode* root){
+    if(!root || !root->right){
+        return INT_MIN;
+    }
+    TreeNode* curr = curr->right;
+    while(curr->left){
+        curr = curr->left;
+    }
+    return curr->data;
+}
+
 void PrintPreorderNode(TreeNode* root, int lvl){
     if(root != nullptr){
         cout << root->data << " (" << lvl << ")" << endl;
@@ -221,12 +265,36 @@ void PrintLevelOrder(TreeNode* root){
     }
 }
 
+tuple<TreeNode*, int, int, int> getStats(TreeNode* root){
+    if(!root){
+        return make_tuple(root, INT_MIN, INT_MIN, INT_MAX);
+    }
+    return make_tuple(
+            FindMinNode(root),
+            FindMaxTree(root), 
+            FindPredecessor(root), 
+            FindSuccessor(root)
+        );
+}
+
+bool IsBST(TreeNode* node, int min, int max){
+    if(!node){
+        return true;
+    }
+    if(node->data<min || node->data>max){
+        return false;
+    }
+    return (IsBST(node->left, min, node->data -1 ) &&
+         IsBST(node->right, node->data + 1, max));
+}
+
+
 class MyBST{
     public:
         MyBST(){ root = nullptr; }
         ~MyBST(){ DestroyTree(root); }
 
-        void Insert(int data) { InsertNode(&root, data);}
+        void Insert(int data) { InsertNode1(root, data);}
         void Insert1(int data){ InsertNode1(root, data);}
 
         void Delete(int data){ root = DeleteNode(root, data);}
@@ -245,7 +313,8 @@ class MyBST{
         int Height() { return MaxDepthTree(root);}
         int size(){ return CountNodes(root);}
 
-
+        int IsBSTv2() { return(IsBST(root, INT_MIN, INT_MAX));}
+        tuple<TreeNode*, int, int, int> BSTStats(){return getStats(root);}
 
     private:   
         TreeNode* root; //pointer to the root
@@ -266,15 +335,15 @@ int main(){
     void (*fct)(TreeNode*) = PrintNode;
     PreorderNode(n, fct);
     */
- 
+    
     MyBST* t = new MyBST();
+    t->Insert(10);
     t->Insert(5);
-    t->Insert(3);
-    t->Insert(8);
+    t->Insert(15);
     t->Insert(2);
-    t->Insert(4);
-    t->Insert(6);
-    t->Insert(9);
+    t->Insert(7);
+    t->Insert(12);
+    t->Insert(20);
     void(*fct)(TreeNode*) = PrintNode;
     cout << "Print Pre-order: " << endl;
     t->Preorder(fct);
@@ -289,8 +358,15 @@ int main(){
     t->PrintLevelorder();
     cout << "Number of nodes per level: " << endl;
     t->PrintGetNumberNodesLevel();
-    delete t;
+    cout << "Is BST: " << (t->IsBSTv2() ? "Yes" : "No") << endl;
 
+    auto stats = t->BSTStats();
+    cout << "Min: " << get<0>(stats) << endl;
+    cout << "Max: " << get<1>(stats) << endl;
+    cout << "Predecessor of root: " << get<2>(stats) << endl;
+    cout << "Successor of root: " << get<3>(stats) << endl;
+    delete t;
+    
 
     return 0;
 }

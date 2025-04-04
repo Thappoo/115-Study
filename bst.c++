@@ -1,6 +1,7 @@
 #include <iostream>
 #include <tuple>
 #include <climits>
+#include <vector>
 
 using namespace std;
 
@@ -178,6 +179,22 @@ TreeNode* DeleteNode(TreeNode *root, MyType data){
     return root;
 }
 
+TreeNode* RightRotate(TreeNode* root){
+    if(root == nullptr || root->left == nullptr) return root;
+    TreeNode* newRoot = root->left;
+    root->left = newRoot->right;
+    newRoot->right = root;
+    return newRoot;
+}
+
+TreeNode* LeftRotate(TreeNode* root){
+    if(root == nullptr || root->right == nullptr) return root;
+    TreeNode* newRoot = root->right;
+    root->right = newRoot->left;
+    newRoot->left = root;
+    return newRoot;
+}
+
 int FindMinTree(TreeNode *root){
     if(root == nullptr){
         return INT_MAX; //or undefined
@@ -199,7 +216,7 @@ int FindMaxTree(TreeNode *root){
 }
 
 int FindPredecessor(TreeNode* root){
-    if(!root || !root->data){
+    if(!root || !root->left){
         return INT_MIN;
     }
     TreeNode* curr = root->left;
@@ -213,7 +230,7 @@ int FindSuccessor(TreeNode* root){
     if(!root || !root->right){
         return INT_MIN;
     }
-    TreeNode* curr = curr->right;
+    TreeNode* curr = root->right;
     while(curr->left){
         curr = curr->left;
     }
@@ -312,6 +329,8 @@ class MyBST{
         void InverTree() { InvertTreeNode(root);} 
         int Height() { return MaxDepthTree(root);}
         int size(){ return CountNodes(root);}
+        void RotateRight() { root = RightRotate(root);}
+        void RotateLeft() { root = LeftRotate(root);}
 
         int IsBSTv2() { return(IsBST(root, INT_MIN, INT_MAX));}
         tuple<TreeNode*, int, int, int> BSTStats(){return getStats(root);}
@@ -321,6 +340,42 @@ class MyBST{
 
 
 };
+
+void TestRotation(const string& name, const vector<int>& elements) {
+    cout << "\nTesting sequence: " << name << endl;
+    MyBST t;
+    for (int val : elements) {
+        t.Insert(val);
+    }
+    
+    cout << "Before rotation:" << endl;
+    t.PrintLevelorder();
+    
+    // Determine which rotation is needed
+    if (elements.size() == 3) {
+        if (elements[1] < elements[0] && elements[2] > elements[0]) {
+            // Left-Right case (needs right then left)
+            cout << "\nAfter right rotation on root:" << endl;
+            t.RotateRight();
+            t.PrintLevelorder();
+        } else if (elements[1] > elements[0] && elements[2] < elements[0]) {
+            // Right-Left case (needs left then right)
+            cout << "\nAfter left rotation on root:" << endl;
+            t.RotateLeft();
+            t.PrintLevelorder();
+        } else if (elements[1] < elements[0] && elements[2] < elements[0]) {
+            // Left-Left case (needs single right)
+            cout << "\nAfter right rotation on root:" << endl;
+            t.RotateRight();
+            t.PrintLevelorder();
+        } else if (elements[1] > elements[0] && elements[2] > elements[0]) {
+            // Right-Right case (needs single left)
+            cout << "\nAfter left rotation on root:" << endl;
+            t.RotateLeft();
+            t.PrintLevelorder();
+        }
+    }
+}
 
 int main(){
     /*
@@ -335,7 +390,7 @@ int main(){
     void (*fct)(TreeNode*) = PrintNode;
     PreorderNode(n, fct);
     */
-    
+    /*
     MyBST* t = new MyBST();
     t->Insert(10);
     t->Insert(5);
@@ -361,11 +416,16 @@ int main(){
     cout << "Is BST: " << (t->IsBSTv2() ? "Yes" : "No") << endl;
 
     auto stats = t->BSTStats();
-    cout << "Min: " << get<0>(stats) << endl;
+    cout << "Min: " << get<0>(stats)->data << endl;
     cout << "Max: " << get<1>(stats) << endl;
     cout << "Predecessor of root: " << get<2>(stats) << endl;
     cout << "Successor of root: " << get<3>(stats) << endl;
     delete t;
+    */
+    TestRotation("20,10,15", {20, 10, 15});
+    TestRotation("10,5,1", {10, 5, 1});
+    TestRotation("10,20,30", {10, 20, 30});
+    TestRotation("10,20,50", {10, 20, 50});
     
 
     return 0;

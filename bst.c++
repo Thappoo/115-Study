@@ -137,6 +137,22 @@ void InsertNode1(TreeNode* &root, MyType data){
     }
 }
 
+bool SearchNodeR(TreeNode* root, MyType data){
+    if(root == nullptr){
+        return false;
+    }
+    else if(root->data == data){
+        return true;
+    }
+    else if(data < root->data){
+        return SearchNodeR(root->left, data);
+    }
+    else{
+        return SearchNodeR(root->right, data);
+    }
+}
+
+
 TreeNode* FindMinNode(TreeNode *root){
     if(root == nullptr){
         return nullptr;

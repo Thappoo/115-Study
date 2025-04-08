@@ -22,7 +22,7 @@ class MyGraphAM{
             }
         }
 
-        MyGraphAM(){
+        ~MyGraphAM(){
             delete[] M;
             delete[] current;
         }
@@ -36,6 +36,9 @@ class MyGraphAM{
             return (M[GetIndex(u,v)] != 0);
         }
 
+        double GetEdgeWeight(int u, int v){
+            return M[GetIndex(u,v)];
+        }
 
         int GetDegree(int u){
             int degree = 0;
@@ -104,16 +107,30 @@ class MyGraphAM{
             int k = 0;
             cout << " :";
             for(int v = 0; v < n; v++){
-                cout << v << "/t";
+                cout << v << "\t";
             }
             cout << endl;
             for(int u = 0; u < n; u++){
                 cout << u << ": ";
                 for(int v = 0; v < n; v++){
-                    cout << M[k] << "/t";
+                    cout << M[k] << "\t";
                     k++;
                 }
                 cout << endl;
+            }
+        }
+
+        void DisplayDirectedEdge(){
+            int k = 0;
+            cout << "List of edges :" << endl;
+            for(int u = 0; u < n; u++){
+                for(int v = 0; v < n; v++){
+                    if(ExistEdge(u,v)){
+                        cout << "(" << u << ","
+                        << v << ") w:" << GetEdgeWeight(u, v)
+                        << endl;
+                    }
+                }
             }
         }
 
@@ -147,6 +164,10 @@ int main(){
     G->SetUndirectedEdge(3, 0);
     G->SetUndirectedEdge(0, 4);
     G->SetUndirectedEdge(1, 4);
+    G->Display();
+    G->DisplayDirectedEdge();
+    cout << "Removing an edge: " << endl;
+    G->RemoveUndirectedEdge(3,0);
     G->Display();
     delete G;
 

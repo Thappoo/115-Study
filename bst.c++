@@ -390,7 +390,7 @@ int main(){
     void (*fct)(TreeNode*) = PrintNode;
     PreorderNode(n, fct);
     */
-    /*
+    
     MyBST* t = new MyBST();
     t->Insert(10);
     t->Insert(5);
@@ -421,12 +421,13 @@ int main(){
     cout << "Predecessor of root: " << get<2>(stats) << endl;
     cout << "Successor of root: " << get<3>(stats) << endl;
     delete t;
-    */
+    
+   /*
     TestRotation("20,10,15", {20, 10, 15});
     TestRotation("10,5,1", {10, 5, 1});
     TestRotation("10,20,30", {10, 20, 30});
     TestRotation("10,20,50", {10, 20, 50});
-    
+    */
 
     return 0;
 }

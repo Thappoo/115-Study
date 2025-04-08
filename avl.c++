@@ -19,6 +19,9 @@ class MyAVL{
         ~MyAVL();
         void Insert(MyType x);
         void Delete(MyType x);
+        bool Search(MyType x);
+        void Display();
+        void Display1();
     private:
         void InsertNode(AVLnode** root, AVLnode* parent, MyType data);
         AVLnode* DeleteNode(AVLnode *root, MyType data);
@@ -118,6 +121,36 @@ void setBalance(AVLnode *n){
     }
 }
 
+void printBalance(AVLnode *n){
+    if(n != nullptr){
+        printBalance(n->left);
+        cout << n->balance << " ";
+        printBalance(n->right);
+    }
+}
+
+void PrintGivenLevel(AVLnode* root, int level){
+    if(root != nullptr){
+        if(level == 0){
+            if(root->parent != nullptr){
+                cout << "_" << root->data << "(" << root->parent->data << ")_";
+            }
+            else{
+                PrintGivenLevel(root->left, level - 1);
+                PrintGivenLevel(root->right, level -1);
+            }
+        }
+    }
+}
+
+void Display(){
+    int h = height(root);
+    int i;
+    for(i = 0; i <=h; i++){
+        PrintGivenLevel(root, i);
+        cout << endl;
+    }
+}
 
 int main(){
 

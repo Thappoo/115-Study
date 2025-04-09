@@ -318,7 +318,61 @@ class MyAL{
             delete[] pi;
             
         }
-        void DFS();
+
+        void DFSVisit(int u, MyAL* G, ColorNode* color,
+                    int* discovery, int* finished, int* pi, int &t){
+            color[u] = ColorNode::Visited;
+            t++;
+            discovery[u] = t;
+            G->SetCurrentVertex(u);
+            while(G->ExistAdjacent(u)){
+                int v = G->GetNextAdjacent(u);
+                if(color[v] == ColorNode::Unvisited){
+                    pi[v] = u;
+                    DFSVisit(v, G, color, discovery, finished, pi, t);
+                }
+            }
+            color[u] = ColorNode::Finished;
+            t++;
+            finished[u] = t;
+        }
+
+        void DFS1(MyAL* G, ColorNode* &color, int* &discovery, int* &finished, int* &pi){
+            int n = G->GetNumberVertices();
+            color = new ColorNode[n];
+            discovery = new int[n];
+            finished = new int[n];
+            pi = new int[n];
+            for(int u = 0; u < n; n++){
+                color[u] = ColorNode::Unvisited;
+                discovery[u] = 0;
+                finished[u] = 0;
+                pi[u] = 0;
+            }
+            int t = 0;
+            for(int u = 0; u < n; u++){
+                if(color[u] == ColorNode::Unvisited){
+                    DFSVisit(u, G, color, discovery, finished, pi, t);
+                }
+            }
+
+        }
+
+        void DFS(){
+            cout << "DFS" << endl;
+            ColorNode *color;
+            int *discovery, *finished, *pi;
+            DFS1(this, color, discovery, finished, pi);
+            for(int u = 0; u < n; u++){
+                cout << u << ": (" << discovery[u] << ","
+                                    << finished[u] << ") Pi="
+                                    << pi[u] << endl;
+            }
+            delete[] color;
+            delete[] discovery;
+            delete[] finished;
+            delete[] pi;
+        }
 
 
 

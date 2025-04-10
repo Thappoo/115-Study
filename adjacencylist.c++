@@ -385,12 +385,15 @@ class MyAL{
 
 int main(){
 
-    int n = 3;
+    int n = 5;
     MyAL* G = new MyAL(n);
-    G->SetUndirectedEdge(1, 2);
-    G->SetUndirectedEdge(1, 3);
+
+    G->SetUndirectedEdge(0,1);
+    G->SetUndirectedEdge(1,2);
+    G->SetUndirectedEdge(2,3);
+    G->SetUndirectedEdge(3,0);
+    G->SetUndirectedEdge(0,4);
+    G->SetUndirectedEdge(1,4);
     G->Display();
-    G->BFS(n);
-    delete G;
-    return 0;
+    G->DFS();
 }

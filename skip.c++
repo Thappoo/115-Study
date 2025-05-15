@@ -7,20 +7,22 @@ typedef double MyType;
 class SkipNode{
     public:
         SkipNode() : next(nullptr), data(0){};
-        SkipNode **next;
-        MyType data;
-        int level;
         SkipNode(MyType x, int level1){
             data = x;
             level = level1;
             next = new SkipNode*[level + 1];
             //fill the next array w/ null
             memset(next, 0, sizeof(SkipNode*)*(level + 1));
-        }
+        }        
+        //array of pointers to nodes of different levels
+        SkipNode **next;
+        MyType data;
+        int level;
 };
 
 class MySkipList{
     public:
+
         MySkipList(){
             MaxLvl = 4;
             P = 0.5;
@@ -81,6 +83,7 @@ class MySkipList{
                     update[i]->next[i] = n;
                 }
             }
+            delete[] update;
         }
 
         void Delete(MyType x){
@@ -101,7 +104,12 @@ class MySkipList{
                         update[i]->next[i] = current->next[i];
                     }
                     delete current;
+
+                    while(level > 0 && head->next[level] == nullptr){
+                        level--;
+                    }
                 }
+                delete[] update;
             }
         }
         bool Search(MyType x){
@@ -139,7 +147,6 @@ class MySkipList{
         void DisplayFile();
     
     private:
-        int RandomLevel();
         int MaxLvl;
         float P;
         //current level of skip list
@@ -148,7 +155,8 @@ class MySkipList{
 };
 
 int main(){
-    MySkipList* s = new MySkipList(2,0.5);
+    srand(time(0));
+    MySkipList* s = new MySkipList(4,0.5);
     s->Insert(10);
     s->Insert(20);
     s->Insert(5);
@@ -161,11 +169,12 @@ int main(){
     s->Insert(16);
     s->Insert(26);
 
-    cout << s->Search(25) << endl;
-    cout << s->Search(14) << endl;
-    cout << s->Search(26) << endl;
+    cout <<"Search 25: " << s->Search(25) << endl;
+    cout << "Search1 14: " << s->Search(14) << endl;
+    cout << "Search 26: " <<  s->Search(26) << endl;
 
     s->Display();
+    cout << endl;
     s->Delete(15);
     s->Display();
 

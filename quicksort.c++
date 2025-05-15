@@ -1,6 +1,14 @@
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
+
+
+void SwapIndex(int array[], int i, int j){
+    int tmp = array[i];
+    array[i] = array[j];
+    array[j] = tmp;
+}
 
 
 void merge(int arr[], int l, int m , int r){
@@ -46,6 +54,35 @@ void mergeSort(int arr[], int l, int r){
         merge(arr, l, m, r);
     }
 
+}
+
+int partition(int array[], int start, int end){
+    int i = start;
+    int j = end;
+
+    int pivot_value = array[(start + end) / 2];
+    bool finished = false;
+    while(!finished){
+        while((i<end) && (array[i] <= pivot_value)){
+            i++;
+        }
+        if(i < j){
+            SwapIndex(array, i, j);
+        }
+        else{
+            finished = true;
+        }
+    }
+
+
+}
+
+void quicksort(int array[], int start, int end){
+    if(start < end){
+        int pivot_index = partition(array, start, end);
+            quicksort(array, start, pivot_index -1);
+            quicksort(array, pivot_index + 1, end);
+    }
 }
 
 int main(){

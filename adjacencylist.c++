@@ -255,18 +255,6 @@ class MyAL{
             return v;
         }
 
-        void Display(){
-            for(int u = 0; u < n; u++){
-                cout << u << ":";
-                NodeGAL* cursor = l[u];
-                while(cursor != nullptr){
-                    cout << cursor->v << "(" << cursor->weight << ") ";
-                    cursor = cursor->next;
-                }
-                cout << endl;
-            }
-        }
-
         void BFS1(int s, MyAL* G, ColorNode* &color, int* &distance, int* &pi){
             int m = G->GetNumberVertices();
             if(!((s >= 0) && (s < n))){
@@ -343,7 +331,7 @@ class MyAL{
             discovery = new int[n];
             finished = new int[n];
             pi = new int[n];
-            for(int u = 0; u < n; n++){
+            for(int u = 0; u < n; u++){
                 color[u] = ColorNode::Unvisited;
                 discovery[u] = 0;
                 finished[u] = 0;
@@ -373,7 +361,18 @@ class MyAL{
             delete[] finished;
             delete[] pi;
         }
-
+        
+        void Display(){
+            for(int u = 0; u < n; u++){
+                cout << u << ":";
+                NodeGAL* cursor = l[u];
+                while(cursor != nullptr){
+                    cout << cursor->v << "(" << cursor->weight << ") ";
+                    cursor = cursor->next;
+                }
+                cout << endl;
+            }
+        }
 
 
     private:
@@ -395,5 +394,9 @@ int main(){
     G->SetUndirectedEdge(0,4);
     G->SetUndirectedEdge(1,4);
     G->Display();
+    G->BFS(0);
     G->DFS();
+
+    delete G;
+    return 0;
 }

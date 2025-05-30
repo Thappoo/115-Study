@@ -408,13 +408,13 @@ int main(){
     */
     
     MyBST* t = new MyBST();
-    t->Insert(10);
-    t->Insert(5);
-    t->Insert(15);
-    t->Insert(2);
-    t->Insert(7);
-    t->Insert(12);
+    t->Insert(50);
+    t->Insert(70);
+    t->Insert(60);
+    t->Insert(30);
     t->Insert(20);
+    t->Insert(40);
+    t->Insert(80);
     void(*fct)(TreeNode*) = PrintNode;
     cout << "Print Pre-order: " << endl;
     t->Preorder(fct);
